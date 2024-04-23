@@ -1,10 +1,6 @@
 #include <Servo.h>
-
-
 #include "Arduino.h"
 
-
-// #define PIN_LED 13
 #define PIN_ANALOG_IN A0
 #define MOTOR 9
 
