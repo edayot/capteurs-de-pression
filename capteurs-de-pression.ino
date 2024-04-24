@@ -1,8 +1,9 @@
 #include <Servo.h>
 #include "Arduino.h"
 
-#define PIN_ANALOG_IN A0
-#define MOTOR 9
+#define IN0 A0
+#define IN1 A1
+#define MOTOR 6
 
 Servo myservo;
 
@@ -11,32 +12,28 @@ Servo myservo;
 void setup()
 {
     // pinMode(PIN_LED, OUTPUT);
-    pinMode(PIN_ANALOG_IN, INPUT);
-    Serial.begin(9600);
+    pinMode(IN0, INPUT);
+    pinMode(IN1, INPUT);
+    Serial.begin(115200);
     Serial.println("Hello World");
     myservo.attach(MOTOR);
 	
 }
 
-int pos = 0;
+double pos = 90;
 
 void loop()
 {   
-    int value = analogRead(PIN_ANALOG_IN);
+    int value1 = analogRead(IN0);
+    int value2 = analogRead(IN1);
 
-    if (value <= 512) {
-        pos ++;
-    }
-    else {
-        pos --;
-    }
-    if (pos < 0) {pos = 0;}
-    if (pos > 180) {pos = 180;}
+    int value = (value1 + value2) / 2;
+
+    pos = map(value, 0, 1023, 0, 180);
 
 
     myservo.write(pos);
     
-    Serial.println(value);
-    Serial.println(pos);
-    delay(10);
+    Serial.println(String(value1) + " " + String(value2) + " " + String(value) + " " + String(pos));
+    delay(50);
 }

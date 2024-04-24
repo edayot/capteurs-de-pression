@@ -1,0 +1,76 @@
+
+#include "Arduino.h"
+
+// #define PIN_LED 13
+#define R0 A0
+#define R1 A1
+#define R2 A2
+#define R3 A3
+
+int R = 10000;
+
+
+
+void setup()
+{
+    // pinMode(PIN_LED, OUTPUT);
+    pinMode(R0, INPUT);
+    pinMode(R1, INPUT);
+    pinMode(R2, INPUT);
+    pinMode(R3, INPUT);
+    Serial.begin(9600);
+    Serial.println("time,R1,R2,R3,R4");
+	
+}
+
+float getForce(int v)
+{
+    // 0.9 = 0g
+    // 1.4 = 54.6g
+    // 1.85 = 100g
+    // 2.25 = 200g
+    // 2.5 = 310g
+    // 2.9 = 450g
+    // 3 = 560g
+    // 3.1 = 705g
+    // 3.4 = 900g
+    // 3.45 = 1000g
+    // sup = 1000g
+    float realV = 5.0 * v / 1023.0;
+    if (realV <=0.9) return 0;
+    if (realV <=1.4) return 54.6 * (realV - 0.9) / (1.4 - 0.9);
+    if (realV <=1.85) return 100 * (realV - 1.4) / (1.85 - 1.4);
+    if (realV <=2.25) return 200 * (realV - 1.85) / (2.25 - 1.85);
+    if (realV <=2.5) return 310 * (realV - 2.25) / (2.5 - 2.25);
+    if (realV <=2.9) return 450 * (realV - 2.5) / (2.9 - 2.5);
+    if (realV <=3) return 560 * (realV - 2.9) / (3 - 2.9);
+    if (realV <=3.1) return 705 * (realV - 3) / (3.1 - 3);
+    if (realV <=3.4) return 900 * (realV - 3.1) / (3.4 - 3.1);
+    if (realV <=3.45) return 1000 * (realV - 3.4) / (3.45 - 3.4);
+    return 1000;
+    
+}
+
+
+void loop()
+{
+    int v0 = analogRead(R0);
+    int v1 = analogRead(R1);
+    int v2 = analogRead(R2);
+    int v3 = analogRead(R3);
+
+    float f0 = getForce(v0);
+    float f1 = getForce(v1);
+    float f2 = getForce(v2);
+    float f3 = getForce(v3);
+
+
+
+
+
+    int time = millis();
+
+    Serial.println(String(time) + "," + String(f0) + "," + String(f1) + "," + String(v2) + "," + String(v3));
+
+    delay(200);
+}
