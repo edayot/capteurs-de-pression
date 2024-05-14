@@ -1,39 +1,53 @@
-#include <Servo.h>
 #include "Arduino.h"
+#include <Servo.h>
 
 #define IN0 A0
 #define IN1 A1
+#define IN2 A2
 #define MOTOR 6
 
-Servo myservo;
 
-
+Servo servo;
 
 void setup()
 {
     // pinMode(PIN_LED, OUTPUT);
     pinMode(IN0, INPUT);
     pinMode(IN1, INPUT);
+    pinMode(IN2, INPUT);
+    
     Serial.begin(115200);
     Serial.println("Hello World");
-    myservo.attach(MOTOR);
-	
+
+    servo.attach(MOTOR);
 }
 
-double pos = 90;
 
 void loop()
 {   
-    int value1 = analogRead(IN0);
-    int value2 = analogRead(IN1);
+    int value0 = analogRead(IN0);
+    int value1 = analogRead(IN1);
+    int value2 = analogRead(IN2);
 
-    int value = (value1 + value2) / 2;
+    int sum = value0 + value1 + value2;
 
-    pos = map(value, 0, 1023, 0, 180);
-
-
-    myservo.write(pos);
     
-    Serial.println(String(value1) + " " + String(value2) + " " + String(value) + " " + String(pos));
+    Serial.print(String(value0) + " " + String(value1) + " " + String(value2) + " " + String(sum) + "\n");
+
+
+    if (sum < 300)
+    {
+        servo.write(0);
+    }
+    else if (sum >= 300 && sum < 1200)
+    {
+        servo.write(180);
+    }
+    else if (sum >= 1200)
+    {
+        servo.write(0);
+    }
+
+    
     delay(50);
 }

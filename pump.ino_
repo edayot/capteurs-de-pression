@@ -1,0 +1,35 @@
+#include "Arduino.h"
+
+#define IN0 A0
+#define IN1 A1
+#define PUMP 6
+
+
+void setup()
+{
+    // pinMode(PIN_LED, OUTPUT);
+    pinMode(IN0, INPUT);
+    pinMode(IN1, INPUT);
+    pinMode(PUMP, OUTPUT);
+    Serial.begin(115200);
+    Serial.println("Hello World");
+}
+
+
+void loop()
+{   
+    int value1 = analogRead(IN0);
+    int value2 = analogRead(IN1);
+
+    int value = (value1 + value2) ;
+
+    if (value > 1000) {
+        digitalWrite(PUMP, HIGH);
+    } else {
+        digitalWrite(PUMP, LOW);
+    }
+
+    
+    Serial.println(String(value));
+    delay(50);
+}
